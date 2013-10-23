@@ -24,14 +24,15 @@ class LineItemsController < ApplicationController
   # POST /line_items
   # POST /line_items.json
   def create
-	clear_counter
+    clear_counter
     @cart = current_cart
     product = Product.find(params[:product_id])
-    @line_item = @cart.line_items.build(product: product)
+    #@line_item = @cart.line_items.build(product: product)
+    @line_item = @cart.add_product(product.id, product.price)
 
     respond_to do |format|
       if @line_item.save
-        format.html { redirect_to @line_item.cart, notice: 'Line item was successfully created.' }
+        format.html { redirect_to @line_item.cart }
         format.json { render action: 'show', status: :created, location: @line_item }
       else
         format.html { render action: 'new' }
@@ -59,7 +60,11 @@ class LineItemsController < ApplicationController
   def destroy
     @line_item.destroy
     respond_to do |format|
-      format.html { redirect_to line_items_url }
+      if current_cart.line_items.empty?
+	format.html { redirect_to store_url, notice: 'Your cart is empty' }
+      else
+	format.html { redirect_to @line_item.cart, notice: 'Item Removed' }
+      end
       format.json { head :no_content }
     end
   end

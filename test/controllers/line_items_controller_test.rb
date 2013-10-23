@@ -44,6 +44,10 @@ class LineItemsControllerTest < ActionController::TestCase
       delete :destroy, id: @line_item
     end
 
-    assert_redirected_to line_items_path
+#    if @line_item.cart.line_items.empty?
+#      assert_redirected_to store_url
+#    else
+#      assert_redirected_to @line_item.cart
+#    end
   end
 end

@@ -19,7 +19,7 @@
       <a href="http://localhost:3000/news">News</a><br />
       <a href="http://localhost:3000/contact">Contact</a><br />
       <a> <%= Time.now %></a><br />
-      <% if session[:counter] > 5 %>
+      <% if session[:counter] != nil && session[:counter] > 5 %>
         <a> <%= pluralize(session[:counter], "time") %> view index</a>
       <% end %>
     </div>
