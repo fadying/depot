@@ -45,6 +45,17 @@
   padding-bottom: 1em;
   width: 16em;
   background: #141;
+
+}
+#cart, #cart table {
+  font-size: smaller;
+  color: white;
+}
+
+#cart table {
+  border-top: 1px dotted #595;
+  border-bottom: 1px dotted #595;
+  margin-bottom: 10px;
 }
 
 #side a {

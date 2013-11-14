@@ -1,4 +1,5 @@
 class CartsController < ApplicationController
+  include CurrentCart
   before_action :set_cart, only: [:show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
 
@@ -59,15 +60,15 @@ class CartsController < ApplicationController
     session[:cart_id] = nil
 
     respond_to do |format|
-      format.html { redirect_to(store_url,
-        notice: 'Your cart is currently empty')}
+      format.html { redirect_to store_url }
+      format.js
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_cart
+    def set_cart2
       @cart = Cart.find(params[:id])
     end
 

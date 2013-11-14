@@ -1,4 +1,6 @@
 class LineItemsController < ApplicationController
+  include CurrentCart
+  before_action :set_cart, only: [:create, :destroy]
   before_action :set_line_item, only: [:show, :edit, :update, :destroy]
 
   # GET /line_items
@@ -25,14 +27,14 @@ class LineItemsController < ApplicationController
   # POST /line_items.json
   def create
     clear_counter
-    @cart = current_cart
     product = Product.find(params[:product_id])
     #@line_item = @cart.line_items.build(product: product)
     @line_item = @cart.add_product(product.id, product.price)
 
     respond_to do |format|
       if @line_item.save
-        format.html { redirect_to @line_item.cart }
+        format.html { redirect_to store_url }
+        format.js { @current_item = @line_item }
         format.json { render action: 'show', status: :created, location: @line_item }
       else
         format.html { render action: 'new' }
@@ -58,13 +60,16 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.json
   def destroy
-    @line_item.destroy
+    @cart.delete_product(@line_item)
+    if @line_item.quantity == 0
+      @line_item.destroy
+    else
+      @line_item.save
+    end
+
     respond_to do |format|
-      if current_cart.line_items.empty?
-	format.html { redirect_to store_url, notice: 'Your cart is empty' }
-      else
-	format.html { redirect_to @line_item.cart, notice: 'Item Removed' }
-      end
+	    format.html { redirect_to store_url }
+      format.js { @current_item = @line_item }
       format.json { head :no_content }
     end
   end

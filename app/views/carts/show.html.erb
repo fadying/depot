@@ -5,16 +5,7 @@
 <h2>Your Pragmatic Cart</h2>
 <div class="cart_title">Your Cart</div>
 <table>
-  <% for item in @cart.line_items %>
-    <tr>
-      <td><%= item.quantity %>&times;</td>
-      <td><%= item.product.title %></td>
-      <td class="item_price">
-        <%= number_to_currency(item.total_price) %></td>
-      <td><%= button_to 'Delete', item, method: :delete, 
-        data: {confirm: 'Are you sure?'}%></td>
-    </tr>
-  <% end %>
+  <%= render(@cart.line_items) %>
 
   <tr class="total_line">
     <td colspan="2">Total</td>
@@ -25,7 +16,3 @@
 <%= button_to 'Empty cart', @cart, method: :delete,
   data: {confirm: 'Are you sure?'} %>
 <%= link_to 'Back', store_path %>
-<!--
-<%= link_to 'Edit', edit_cart_path(@cart) %> |
-<%= link_to 'Back', carts_path %>
--->
