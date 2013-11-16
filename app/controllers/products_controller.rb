@@ -1,5 +1,19 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:who_bought, :show, :edit, :update, :destroy]
+
+  def who_bought
+    @latest_order = @product.orders.order(:updated_at).last
+    if stale?(etag: @latest_order, last_modified:
+              @latest_order.try(:created_at).try(:utc))
+      respond_to do |format|
+        format.atom
+        format.html
+        #format.xml { render xml: @product.to_xml(include: :orders)}
+        format.xml
+        format.json { render json: @product.to_json(include: :orders)}
+      end
+    end
+  end
 
   # GET /products
   # GET /products.json
