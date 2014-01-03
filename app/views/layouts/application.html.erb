@@ -19,14 +19,28 @@
 		      <%= render @cart %>
         <% end %>
       <% end %>
-      <a href="http://localhost:3000">Home</a><br />
-      <a href="http://localhost:3000/faq">Questions</a><br />
-      <a href="http://localhost:3000/news">News</a><br />
-      <a href="http://localhost:3000/contact">Contact</a><br />
-      <a> <%= Time.now %></a><br />
+      <ul>
+        <li><a href="http://localhost:3000">Home</a></li>
+        <li><a href="http://localhost:3000/faq">Questions</a></li>
+        <li><a href="http://localhost:3000/news">News</a></li>
+        <li><a href="http://localhost:3000/contact">Contact</a></li>
+        <li><a> <%= Time.now %></a></li>
       <% if session[:counter] != nil && session[:counter] > 5 %>
-        <a> <%= pluralize(session[:counter], "time") %> view index</a>
+        <li>
+          <a> <%= pluralize(session[:counter], "time") %> view index</a>
+        </li>
       <% end %>
+      </ul>
+
+      <% if session[:user_id] %>
+      <ul>
+        <li><%= link_to 'Orders', orders_path  %></li>
+        <li><%= link_to 'Products', products_path  %></li>
+        <li><%= link_to 'Users', users_path  %></li>
+      </ul>
+      <%= button_to 'Logout', logout_path, method: :delete %>
+      <% end %>
+      end
     </div>
     <div id="main">
       <%= yield %>
